@@ -23,21 +23,35 @@ const Home = () => {
   }, []);
 
   const fetchHotels = async () => {
-    const response = await backend.get('/hotels');
-    setHotels(response.data);
+    try {
+      const response = await backend.get('/hotels');
+      setHotels(response.data);
+    } catch (error) { 
+    }
+    
   };
 
   const addHotel = async () => {
-    const response = await backend.post('/hotels', { name, location, price });
+    try {
+      const response = await backend.post('/hotels', { name, location, price });
     setHotels([...hotels, response.data]);
     setName('');
     setLocation('');
     setPrice('');
+    } catch (error) {
+      console.log(error)
+    }
+    
   };
 
   const deleteHotel = async (id: number) => {
-    await backend.delete(`/hotels/${id}`);
-    setHotels(hotels.filter(hotel => hotel.id !== id));
+    try {
+      await backend.delete(`/hotels/${id}`);
+      setHotels(hotels.filter(hotel => hotel.id !== id));
+    } catch (error) {
+      console.log(error)
+    }
+    
   };
 
   const updateHotel = async (id: number) => {
@@ -92,7 +106,6 @@ const Home = () => {
             key={hotel.id}
             hotel={hotel}
             onDelete={() => deleteHotel(hotel.id)}
-            onBook={() => bookHotel(hotel.id)}
           />
         ))}
       </div>
